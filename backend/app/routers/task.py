@@ -1,4 +1,4 @@
-from fastapi import Depends, Query, HTTPException
+from fastapi import Depends, Query, HTTPException, APIRouter
 from sqlmodel import Session, select
 from app.models import (
     Task,
@@ -7,8 +7,6 @@ from app.models import (
     TaskStatus,
     get_session,
 )
-
-from fastapi import APIRouter
 
 router = APIRouter()
 
