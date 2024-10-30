@@ -1,7 +1,7 @@
 from typing import Annotated
 from datetime import timedelta
 
-from sqlmodel import Session
+from sqlmodel import Session, select
 
 from fastapi import Depends, HTTPException, APIRouter
 from fastapi.security import OAuth2PasswordRequestForm
@@ -26,13 +26,11 @@ async def login(
     session: Session = Depends(get_session),
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ):
-    db_user = session.get(User, form_data.username)
-    if not db_user:
-        raise HTTPException(
-            status_code=404, detail="Incorrect username or password"
-        )
-
-    if not pbkdf2_sha256.verify(form_data.password, db_user.hashed_password):
+    stmt = select(User).where(User.username == form_data.username)
+    db_user = session.exec(stmt).one()
+    if not db_user or (
+        not pbkdf2_sha256.verify(form_data.password, db_user.hashed_password)
+    ):
         raise HTTPException(
             status_code=400, detail="Incorrect username or password"
         )
@@ -60,6 +58,7 @@ async def read_users_me(
 def create_user(*, session: Session = Depends(get_session), user: UserCreate):
     extra_data = {"hashed_password": hash_password(user.password)}
     db_user = User.model_validate(user, update=extra_data)
+
     session.add(db_user)
     session.commit()
     session.refresh(db_user)

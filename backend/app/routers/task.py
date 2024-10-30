@@ -34,7 +34,12 @@ def read_tasks(
 
 
 @router.post("/")
-def create_task(*, session: Session = Depends(get_session), task: TaskCreate):
+def create_task(
+    *,
+    current_user: Annotated[User, Depends(get_current_active_user)],
+    session: Session = Depends(get_session),
+    task: TaskCreate,
+):
     db_task = Task.model_validate(task)
     session.add(db_task)
     session.commit()
@@ -43,19 +48,31 @@ def create_task(*, session: Session = Depends(get_session), task: TaskCreate):
 
 
 @router.get("/{task_id}")
-def read_task(*, session: Session = Depends(get_session), task_id: int):
+def read_task(
+    *,
+    session: Session = Depends(get_session),
+    current_user: Annotated[User, Depends(get_current_active_user)],
+    task_id: int,
+):
     db_task = session.get(Task, task_id)
     if not db_task:
+        raise HTTPException(status_code=404, detail="Task not found")
+
+    if db_task.user_id != current_user.id:
         raise HTTPException(status_code=404, detail="Task not found")
     return db_task
 
 
 @router.patch("/{task_id}")
 def update_task(
-    *, session: Session = Depends(get_session), task_id: int, task: TaskUpdate
+    *,
+    session: Session = Depends(get_session),
+    current_user: Annotated[User, Depends(get_current_active_user)],
+    task_id: int,
+    task: TaskUpdate,
 ):
     db_task = session.get(Task, task_id)
-    if not db_task:
+    if (not db_task) or (db_task.user_id != current_user.id):
         raise HTTPException(status_code=404, detail="Task not found")
 
     task_data = task.model_dump(exclude_unset=True)
@@ -67,9 +84,14 @@ def update_task(
 
 
 @router.delete("/{task_id}")
-def delete_task(*, session: Session = Depends(get_session), task_id: int):
+def delete_task(
+    *,
+    current_user: Annotated[User, Depends(get_current_active_user)],
+    session: Session = Depends(get_session),
+    task_id: int,
+):
     db_task = session.get(Task, task_id)
-    if not db_task:
+    if (not db_task) or (db_task.user_id != current_user.id):
         raise HTTPException(status_code=404, detail="Task not found")
 
     db_task.status = TaskStatus.deleted

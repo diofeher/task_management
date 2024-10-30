@@ -10,6 +10,7 @@ def test_create_task(client: TestClient):
             "title": "Deadpond",
             "description": "Dive Wilson",
             "due_date": "2023-01-01T00:01:01",
+            "user_id": 100,
         },
     )
     data = response.json()
@@ -71,7 +72,10 @@ def test_read_tasks(session: Session, client: TestClient):
 
 def test_read_task(session: Session, client: TestClient):
     task_1 = Task(
-        title="Deadpond", description="Dive Wilson", due_date="2023-01-01"
+        title="Deadpond",
+        description="Dive Wilson",
+        due_date="2023-01-01",
+        user_id=100,
     )
     session.add(task_1)
     session.commit()
@@ -86,7 +90,10 @@ def test_read_task(session: Session, client: TestClient):
 
 def test_update_task(session: Session, client: TestClient):
     task_1 = Task(
-        title="Deadpond", description="Dive Wilson", due_date="2023-01-01"
+        title="Deadpond",
+        description="Dive Wilson",
+        due_date="2023-01-01",
+        user_id=100,
     )
     session.add(task_1)
     session.commit()
@@ -110,9 +117,20 @@ def test_delete_task(session: Session, client: TestClient):
     session.commit()
 
     response = client.delete(f"/tasks/{task_1.id}")
+    assert response.status_code == 404  # authentication
 
-    task_in_db = session.get(Task, task_1.id)
+    task_2 = Task(
+        title="Deadpond",
+        description="Dive Wilson",
+        due_date="2023-01-01",
+        user_id=100,
+    )
+    session.add(task_2)
+    session.commit()
 
+    task_in_db = session.get(Task, task_2.id)
+
+    response = client.delete(f"/tasks/{task_2.id}")
     assert response.status_code == 200
 
     assert task_in_db.status == "deleted"

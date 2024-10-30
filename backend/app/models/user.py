@@ -1,9 +1,16 @@
 from sqlmodel import SQLModel, Field
+from sqlalchemy import Column, Integer
 from pydantic import BaseModel
 
 
 class User(SQLModel, table=True):
-    username: str = Field(unique=True, primary_key=True)
+    id: int | None = Field(
+        default=None,
+        sa_column=Column(
+            Integer, primary_key=True, nullable=True, autoincrement=True
+        ),
+    )
+    username: str = Field(unique=True)
     hashed_password: str
 
 

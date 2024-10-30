@@ -16,7 +16,9 @@ from app.auth import get_current_active_user, hash_password
 
 
 def get_current_active_user_test():
-    return User(username="rayquaza", hashed_password=hash_password("violet"))
+    return User(
+        id=100, username="rayquaza", hashed_password=hash_password("violet")
+    )
 
 
 @pytest.fixture(name="session")

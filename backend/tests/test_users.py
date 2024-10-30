@@ -16,7 +16,6 @@ def test_create_user_and_token(client: TestClient):
     response = client.post(
         "/users/token", data={"username": "pikachu", "password": "ash"}
     )
-    print(response.text)
     assert response.status_code == 200
     data = response.json()
     assert data["username"] == "pikachu"

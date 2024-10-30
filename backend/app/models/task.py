@@ -17,6 +17,7 @@ class TaskBase(SQLModel):
     status: TaskStatus = Field(
         sa_column=Column(Enum(TaskStatus)), default=TaskStatus.created
     )
+    user_id: int | None = Field(default=None, foreign_key="user.id")
 
 
 class Task(TaskBase, table=True):
