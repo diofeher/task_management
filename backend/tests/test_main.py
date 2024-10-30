@@ -12,13 +12,6 @@ from app.models import (
 )
 from app.main import app
 
-# @pytest.fixture()
-# def clean_db(session: Session):
-#     tables = [Task.__tablename__]
-#     for table in tables:
-#         session.execute(text(f'DELETE FROM {table}'))
-#     session.commit()
-
 
 @pytest.fixture(name="session")
 def session_fixture():
