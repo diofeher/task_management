@@ -7,8 +7,21 @@ import datetime
 from fastapi import FastAPI, Query, HTTPException
 from pydantic import BaseModel
 from src.models import Task, TaskUpdate, TaskCreate, TaskStatus, create_db_and_tables, engine
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+origins = [
+    "*",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # TODO: Move to another file
 @app.on_event("startup")
