@@ -9,3 +9,7 @@ Install with
 After that, you need to build your project
 
 `rye sync`
+
+To run the tests:
+
+`rye run pytest`

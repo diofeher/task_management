@@ -31,9 +31,11 @@ li {
   align-items: center;
 }
 
-input[type="text"] {
+input[type="text"], textarea, input[type="date"] {
   padding: 8px;
-  margin-right: 8px;
+  margin: 8px;
+  border: 1px solid #fff;
+  background: var(--background);
 }
 
 button {

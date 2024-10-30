@@ -1,12 +1,15 @@
-from typing import Union, Annotated
 # TODO: Move to its own module
 from sqlmodel import Session, select
-from pydantic import AfterValidator
-import datetime
 
 from fastapi import FastAPI, Query, HTTPException
-from pydantic import BaseModel
-from src.models import Task, TaskUpdate, TaskCreate, TaskStatus, create_db_and_tables, engine
+from src.models import (
+    Task,
+    TaskUpdate,
+    TaskCreate,
+    TaskStatus,
+    create_db_and_tables,
+    engine,
+)
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -23,19 +26,26 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 # TODO: Move to another file
 @app.on_event("startup")
 def on_startup():
-    create_db_and_tables()
+    create_db_and_tables(engine)
 
 
 @app.get("/tasks/")
 def read_tasks(offset: int = 0, limit: int = Query(default=100, le=100)):
     with Session(engine) as session:
-        stmt = select(Task).where(Task.status != TaskStatus.deleted).offset(offset).limit(limit)
+        stmt = (
+            select(Task)
+            .where(Task.status != TaskStatus.deleted)
+            .offset(offset)
+            .limit(limit)
+        )
         tasks = session.exec(stmt).all()
         return tasks
-    
+
+
 @app.post("/tasks/")
 def create_task(task: TaskCreate):
     with Session(engine) as session:
@@ -44,6 +54,7 @@ def create_task(task: TaskCreate):
         session.commit()
         session.refresh(db_task)
         return db_task
+
 
 @app.get("/tasks/{task_id}")
 def read_task(task_id: int):
@@ -67,7 +78,6 @@ def update_task(task_id: int, task: TaskUpdate):
         session.commit()
         session.refresh(db_task)
         return db_task
-
 
 
 @app.delete("/tasks/{task_id}")
