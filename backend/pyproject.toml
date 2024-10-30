@@ -1,0 +1,41 @@
+[project]
+name = "task-management"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "Diogenes Fernandes", email = "diofeher@gmail.com" }
+]
+
+dependencies = [
+    "fastapi[standard]>=0.115.4",
+    "hypercorn>=0.16.0",
+    "email-validator>=2.1.1",
+    "pydantic>=2.7.1",
+    "python-multipart>=0.0.9",
+    "sqlmodel>=0.0.22",
+    "enum>=0.4.7",
+]
+readme = "README.md"
+requires-python = ">= 3.8"
+
+# [project.scripts]
+# dev = "rye run fastapi dev src"
+# build = "docker build ."
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = [
+    "mypy>=1.10.0",
+    "isort>=5.13.2",
+    "black>=24.4.2",
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/task_management"]
