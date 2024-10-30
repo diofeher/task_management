@@ -3,8 +3,16 @@ from fastapi.testclient import TestClient
 from sqlmodel import Session, create_engine
 from sqlmodel.pool import StaticPool
 
-from .models import get_session, create_db_and_tables
+
+from .models import get_session, Task, create_db_and_tables, drop_db_and_tables
 from .main import app
+
+# @pytest.fixture()
+# def clean_db(session: Session):
+#     tables = [Task.__tablename__]
+#     for table in tables:
+#         session.execute(text(f'DELETE FROM {table}'))
+#     session.commit()
 
 
 @pytest.fixture(name="session")
@@ -14,12 +22,13 @@ def session_fixture():
         connect_args={"check_same_thread": False},
         poolclass=StaticPool,
     )
+
     create_db_and_tables(engine)
     with Session(engine) as session:
         yield session
 
     # import pdb;pdb.set_trace()
-    # SQLModel.metadata.drop_all(engine)
+    drop_db_and_tables(engine)
 
 
 @pytest.fixture(name="client")
@@ -33,6 +42,7 @@ def client_fixture(session: Session):
     app.dependency_overrides.clear()
 
 
+# @pytest.mark.usefixtures("clean_db", autouse=True)
 def test_create_task(client: TestClient):
     response = client.post(
         "/tasks/",
@@ -71,65 +81,78 @@ def test_create_task_invalid(client: TestClient):
     assert response.status_code == 422
 
 
-# def test_read_tasks(session: Session, client: TestClient):
-#     task_1 = Task(title="Deadpond", description="Dive Wilson", due_date="2023-01-01")
-#     task_2 = Task(title="Rusty-Man", description="Tommy Sharp", due_date="2023-01-01", status="started")
-#     session.add(task_1)
-#     session.add(task_2)
-#     session.commit()
+def test_read_tasks(session: Session, client: TestClient):
+    task_1 = Task(
+        title="Deadpond", description="Dive Wilson", due_date="2023-01-01"
+    )
+    task_2 = Task(
+        title="Rusty-Man",
+        description="Tommy Sharp",
+        due_date="2023-01-01",
+        status="started",
+    )
+    session.add(task_1)
+    session.add(task_2)
+    session.commit()
 
-#     response = client.get("/tasks/")
-#     data = response.json()
+    response = client.get("/tasks/")
+    data = response.json()
 
-#     assert response.status_code == 200
+    assert response.status_code == 200
 
-#     assert len(data) == 2
-#     assert data[0]["title"] == task_1.title
-#     assert data[0]["description"] == task_1.description
-#     assert data[0]["age"] == task_1.age
-#     assert data[0]["id"] == task_1.id
-#     assert data[1]["title"] == task_2.title
-#     assert data[1]["description"] == task_2.description
-#     assert data[1]["age"] == task_2.age
-#     assert data[1]["id"] == task_2.id
-
-
-# def test_read_task(session: Session, client: TestClient):
-#     task_1 = Task(title="Deadpond", description="Dive Wilson",  due_date="2023-01-01")
-#     session.add(task_1)
-#     session.commit()
-
-#     response = client.get(f"/tasks/{task_1.id}")
-#     data = response.json()
-
-#     assert response.status_code == 200
-#     assert data["title"] == task_1.title
-#     assert data["description"] == task_1.description
+    assert len(data) == 2
+    assert data[0]["title"] == task_1.title
+    assert data[0]["description"] == task_1.description
+    assert data[0]["id"] == task_1.id
+    assert data[1]["title"] == task_2.title
+    assert data[1]["description"] == task_2.description
+    assert data[1]["id"] == task_2.id
 
 
-# def test_update_task(session: Session, client: TestClient):
-#     task_1 = Task(title="Deadpond", description="Dive Wilson", due_date="2023-01-01")
-#     session.add(task_1)
-#     session.commit()
+def test_read_task(session: Session, client: TestClient):
+    task_1 = Task(
+        title="Deadpond", description="Dive Wilson", due_date="2023-01-01"
+    )
+    session.add(task_1)
+    session.commit()
 
-#     response = client.patch(f"/tasks/{task_1.id}", json={"title": "Deadpuddle"})
-#     data = response.json()
+    response = client.get(f"/tasks/{task_1.id}")
+    data = response.json()
 
-#     assert response.status_code == 200
-#     assert data["title"] == "Deadpuddle"
-#     assert data["description"] == "Dive Wilson"
-#     assert data["id"] == task_1.id
+    assert response.status_code == 200
+    assert data["title"] == task_1.title
+    assert data["description"] == task_1.description
 
 
-# def test_delete_task(session: Session, client: TestClient):
-#     task_1 = Task(title="Deadpond", description="Dive Wilson", due_date="2023-01-01")
-#     session.add(task_1)
-#     session.commit()
+def test_update_task(session: Session, client: TestClient):
+    task_1 = Task(
+        title="Deadpond", description="Dive Wilson", due_date="2023-01-01"
+    )
+    session.add(task_1)
+    session.commit()
 
-#     response = client.delete(f"/tasks/{task_1.id}")
+    response = client.patch(
+        f"/tasks/{task_1.id}", json={"title": "Deadpuddle"}
+    )
+    data = response.json()
 
-#     task_in_db = session.get(Task, task_1.id)
+    assert response.status_code == 200
+    assert data["title"] == "Deadpuddle"
+    assert data["description"] == "Dive Wilson"
+    assert data["id"] == task_1.id
 
-#     assert response.status_code == 200
 
-#     assert task_in_db is None
+def test_delete_task(session: Session, client: TestClient):
+    task_1 = Task(
+        title="Deadpond", description="Dive Wilson", due_date="2023-01-01"
+    )
+    session.add(task_1)
+    session.commit()
+
+    response = client.delete(f"/tasks/{task_1.id}")
+
+    task_in_db = session.get(Task, task_1.id)
+
+    assert response.status_code == 200
+
+    assert task_in_db.status == "deleted"

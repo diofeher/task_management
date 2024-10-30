@@ -1,7 +1,6 @@
-import datetime
+from datetime import datetime
 import enum
 from sqlmodel import Field, Session, SQLModel, create_engine, Enum, Column
-from sqlalchemy import DateTime
 
 
 class TaskStatus(str, enum.Enum):
@@ -14,7 +13,7 @@ class TaskStatus(str, enum.Enum):
 class TaskBase(SQLModel):
     title: str
     description: str
-    due_date: datetime.datetime = Field(sa_column=Column(DateTime()))
+    due_date: datetime | None = Field(nullable=True, default=None)
     status: TaskStatus = Field(
         sa_column=Column(Enum(TaskStatus)), default=TaskStatus.created
     )
@@ -32,7 +31,11 @@ class TaskCreate(TaskBase):
 
 
 class TaskUpdate(TaskBase):
-    pass
+    title: str | None = None
+    description: str | None = None
+    status: TaskStatus | None = Field(
+        sa_column=Column(Enum(TaskStatus)), default=TaskStatus.created
+    )
 
 
 sqlite_file_name = "database.db"
@@ -42,8 +45,12 @@ connect_args = {"check_same_thread": False}
 engine = create_engine(sqlite_url, connect_args=connect_args)
 
 
-def create_db_and_tables(eng):
+def create_db_and_tables(eng=engine):
     SQLModel.metadata.create_all(eng)
+
+
+def drop_db_and_tables(eng=engine):
+    SQLModel.metadata.drop_all(eng)
 
 
 def get_session():
