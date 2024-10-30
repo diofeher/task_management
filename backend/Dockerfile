@@ -29,7 +29,7 @@ USER appuser
 EXPOSE 8000
 
 # Entrypoint to run the FastAPI application
-CMD ["uvicorn", "src.main:app"]
+CMD ["uvicorn", "app.main:app"]
 # Security hardening
 # - Use slim image and avoid installing unnecessary packages
 # - Run as a non-root user

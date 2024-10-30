@@ -4,8 +4,13 @@ from sqlmodel import Session, create_engine
 from sqlmodel.pool import StaticPool
 
 
-from .models import get_session, Task, create_db_and_tables, drop_db_and_tables
-from .main import app
+from app.models import (
+    get_session,
+    Task,
+    create_db_and_tables,
+    drop_db_and_tables,
+)
+from app.main import app
 
 # @pytest.fixture()
 # def clean_db(session: Session):

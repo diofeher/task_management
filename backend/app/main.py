@@ -2,7 +2,7 @@
 from sqlmodel import Session, select
 
 from fastapi import Depends, FastAPI, Query, HTTPException
-from src.models import (
+from app.models import (
     Task,
     TaskUpdate,
     TaskCreate,
