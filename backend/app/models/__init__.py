@@ -1,6 +1,4 @@
 from sqlmodel import Session, create_engine, SQLModel
-from .task import Task, TaskUpdate, TaskCreate, TaskStatus
-from .user import User, UserInDB
 
 sqlite_file_name = "database.db"
 sqlite_url = f"sqlite:///{sqlite_file_name}"
@@ -20,13 +18,3 @@ def drop_db_and_tables(eng=engine):
 def get_session():
     with Session(engine) as session:
         yield session
-
-
-__all__ = [
-    "Task",
-    "TaskUpdate",
-    "TaskCreate",
-    "TaskStatus",
-    "User",
-    "UserInDB",
-]

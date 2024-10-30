@@ -1,89 +1,66 @@
 from typing import Annotated
+from datetime import timedelta
 
-from fastapi import Depends, HTTPException, status
-from app.models import User, UserInDB
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from sqlmodel import Session
 
-from fastapi import APIRouter
+from fastapi import Depends, HTTPException, APIRouter
+from fastapi.security import OAuth2PasswordRequestForm
+from passlib.hash import pbkdf2_sha256
 
-router = APIRouter()
+from app.models.user import User, UserCreate
+from app.models import get_session
+from app.auth import (
+    create_access_token,
+    get_current_active_user,
+    hash_password,
+)
 
-fake_users_db = {
-    "johndoe": {
-        "username": "johndoe",
-        "full_name": "John Doe",
-        "email": "johndoe@example.com",
-        "hashed_password": "fakehashedsecret",
-        "disabled": False,
-    },
-    "alice": {
-        "username": "alice",
-        "full_name": "Alice Wonderson",
-        "email": "alice@example.com",
-        "hashed_password": "fakehashedsecret2",
-        "disabled": True,
-    },
-}
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-
-def fake_hash_password(password: str):
-    return "fakehashed" + password
-
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
-
-def get_user(db, username: str):
-    if username in db:
-        user_dict = db[username]
-        return UserInDB(**user_dict)
-
-
-def fake_decode_token(token):
-    # This doesn't provide any security at all
-    # Check the next version
-    user = get_user(fake_users_db, token)
-    return user
-
-
-async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
-    user = fake_decode_token(token)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid authentication credentials",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    return user
-
-
-async def get_current_active_user(
-    current_user: Annotated[User, Depends(get_current_user)],
-):
-    if current_user.disabled:
-        raise HTTPException(status_code=400, detail="Inactive user")
-    return current_user
+router = APIRouter(prefix="/users")
 
 
 @router.post("/token")
-async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
-    user_dict = fake_users_db.get(form_data.username)
-    if not user_dict:
+async def login(
+    *,
+    session: Session = Depends(get_session),
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+):
+    db_user = session.get(User, form_data.username)
+    if not db_user:
+        raise HTTPException(
+            status_code=404, detail="Incorrect username or password"
+        )
+
+    if not pbkdf2_sha256.verify(form_data.password, db_user.hashed_password):
         raise HTTPException(
             status_code=400, detail="Incorrect username or password"
         )
-    user = UserInDB(**user_dict)
-    hashed_password = fake_hash_password(form_data.password)
-    if not hashed_password == user.hashed_password:
-        raise HTTPException(
-            status_code=400, detail="Incorrect username or password"
-        )
 
-    return {"access_token": user.username, "token_type": "bearer"}
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": db_user.username}, expires_delta=access_token_expires
+    )
+
+    return {
+        "access_token": access_token,
+        "username": db_user.username,
+        "token_type": "bearer",
+    }
 
 
-@router.get("/users/me")
+@router.get("/me")
 async def read_users_me(
     current_user: Annotated[User, Depends(get_current_active_user)],
 ):
     return current_user
+
+
+@router.post("/")
+def create_user(*, session: Session = Depends(get_session), user: UserCreate):
+    extra_data = {"hashed_password": hash_password(user.password)}
+    db_user = User.model_validate(user, update=extra_data)
+    session.add(db_user)
+    session.commit()
+    session.refresh(db_user)
+    return db_user

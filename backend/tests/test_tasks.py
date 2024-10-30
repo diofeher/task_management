@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 from sqlmodel import Session
-from app.models import Task
+from app.models.task import Task
 
 
 def test_create_task(client: TestClient):

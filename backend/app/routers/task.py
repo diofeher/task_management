@@ -1,19 +1,24 @@
+from typing import Annotated
 from fastapi import Depends, Query, HTTPException, APIRouter
 from sqlmodel import Session, select
-from app.models import (
+from app.models.user import User
+from app.auth import get_current_active_user
+from app.models.task import (
     Task,
     TaskUpdate,
     TaskCreate,
     TaskStatus,
-    get_session,
 )
 
-router = APIRouter()
+from app.models import get_session
+
+router = APIRouter(prefix="/tasks")
 
 
-@router.get("/tasks/")
+@router.get("/")
 def read_tasks(
     *,
+    current_user: Annotated[User, Depends(get_current_active_user)],
     session: Session = Depends(get_session),
     offset: int = 0,
     limit: int = Query(default=100, le=100),
@@ -28,7 +33,7 @@ def read_tasks(
     return tasks
 
 
-@router.post("/tasks/")
+@router.post("/")
 def create_task(*, session: Session = Depends(get_session), task: TaskCreate):
     db_task = Task.model_validate(task)
     session.add(db_task)
@@ -37,7 +42,7 @@ def create_task(*, session: Session = Depends(get_session), task: TaskCreate):
     return db_task
 
 
-@router.get("/tasks/{task_id}")
+@router.get("/{task_id}")
 def read_task(*, session: Session = Depends(get_session), task_id: int):
     db_task = session.get(Task, task_id)
     if not db_task:
@@ -45,7 +50,7 @@ def read_task(*, session: Session = Depends(get_session), task_id: int):
     return db_task
 
 
-@router.patch("/tasks/{task_id}")
+@router.patch("/{task_id}")
 def update_task(
     *, session: Session = Depends(get_session), task_id: int, task: TaskUpdate
 ):
@@ -61,7 +66,7 @@ def update_task(
     return db_task
 
 
-@router.delete("/tasks/{task_id}")
+@router.delete("/{task_id}")
 def delete_task(*, session: Session = Depends(get_session), task_id: int):
     db_task = session.get(Task, task_id)
     if not db_task:
