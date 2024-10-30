@@ -40,3 +40,7 @@ allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/task_management"]
+
+[tool.ruff]
+# Set the maximum line length to 79.
+line-length = 79
