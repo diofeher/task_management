@@ -20,7 +20,6 @@ export const apiForm = async (endpoint: string, options: FetchOptions = {}) => {
 
   if (!response.ok) {
     const errorData = await response.json();
-    console.log(errorData);
     throw new Error(errorData.detail || 'API request failed');
   }
 

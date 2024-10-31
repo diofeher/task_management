@@ -1,17 +1,18 @@
 import { FormEvent, useState } from 'react';
 
-import { useTaskContext } from '../contexts/TaskContext';
+interface ChildProps {
+  addTask: any;
+}
 
-const TaskInput: React.FC = () => {
+const TaskInput: React.FC<ChildProps> = ({ addTask }) => {
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [dueDate, setDueDate] = useState<string>('');
-  const { addTask } = useTaskContext();
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (title.trim() && dueDate) {
-      addTask(title, description, dueDate);
+      await addTask(title, description, dueDate);
       setTitle('');
       setDescription('');
       setDueDate('');

@@ -28,7 +28,6 @@ const TaskContext = createContext<TaskContextType | undefined>(undefined);
 export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const { user } = useAuth();
-  console.log("TaskProvider", user);
   
   // Fetch all tasks from the API
   const fetchTasks = async () => {
@@ -51,16 +50,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
         headers: authHeader(user),
         body: { title, description, due_date: dueDate, completed: false }
       });
-      console.log("added Task", newTask);
-      // setTasks((prevTasks) => {
-      //   console.log("OK!!", prevTasks, newTask);
-      //   return [...prevTasks, newTask]
-      // });
-      // setTasks((prevTasks) => {
-      //   // [...prevTasks, {title: title}]);
-      //   return [{title: 1, description: 1}];
-      // });
-      setTasks([]);
+      setTasks((prevTasks) => [...prevTasks, newTask]);
     } catch (error) {
       console.error("Failed to add task:", error);
     }

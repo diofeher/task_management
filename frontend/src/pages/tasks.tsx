@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useEffect } from 'react';
 import { Task, useTaskContext } from '../contexts/TaskContext';
 
@@ -8,8 +6,7 @@ import { TaskProvider } from '../contexts/TaskContext';
 import { useAuth } from '../contexts/AuthContext';
 
 const TaskList: React.FC = () => {
-  console.log("TaskList rerender");
-  const { tasks, updateTask, deleteTask, fetchTasks, toggleTaskCompletion } = useTaskContext();
+  const { tasks, updateTask, deleteTask, addTask, fetchTasks, toggleTaskCompletion } = useTaskContext();
   const { user } = useAuth();
 
   useEffect(() => {
@@ -24,7 +21,7 @@ const TaskList: React.FC = () => {
 
   return (
     <TaskProvider>
-      <TaskInput/>
+      <TaskInput addTask={addTask} />
       <ul>
       {tasks.map((task: Task) => (
           <li key={task.id} style={{ textDecoration: task.completed ? 'line-through' : 'none' }}>
