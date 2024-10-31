@@ -1,7 +1,7 @@
 from datetime import datetime
 import enum
 from sqlmodel import Field, SQLModel, Enum, Column
-
+from pydantic import ConfigDict
 
 class TaskStatus(str, enum.Enum):
     started = "started"
@@ -21,8 +21,7 @@ class TaskBase(SQLModel):
 
 
 class Task(TaskBase, table=True):
-    class Config:
-        validate_assignment = True
+    model_config = ConfigDict(validate_assignment=True)
 
     id: int | None = Field(default=None, primary_key=True, index=True)
 

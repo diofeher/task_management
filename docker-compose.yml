@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      # TODO: Should not be hardcoded on the code
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  api:
+    build:
+      context: backend/
+      dockerfile: Dockerfile  # Your FastAPI Dockerfile path
+    environment:
+      # TODO: Should not be hardcoded on the code
+      - DATABASE_URL=postgresql://myuser:mypassword@db:5432/mydatabase
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:

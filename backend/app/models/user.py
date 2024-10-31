@@ -1,8 +1,6 @@
 from sqlmodel import SQLModel, Field
 from sqlalchemy import Column, Integer
-from pydantic import BaseModel
-
-
+from pydantic import BaseModel, ConfigDict
 class User(SQLModel, table=True):
     id: int | None = Field(
         default=None,
@@ -15,8 +13,7 @@ class User(SQLModel, table=True):
 
 
 class UserCreate(BaseModel):
-    class Config:
-        validate_assignments = True
+    model_config = ConfigDict(validate_assignment=True)
 
     username: str
     password: str

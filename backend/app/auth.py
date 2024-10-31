@@ -6,9 +6,9 @@ from datetime import datetime, timedelta, timezone
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from sqlmodel import Session
+from sqlmodel import Session, select
 
-from app.models import get_session
+from app.db import get_session
 from app.models.user import User, TokenData
 
 # TODO: Pass as configuration, hardcoded for now
@@ -53,7 +53,8 @@ async def get_current_user(
     except InvalidTokenError:
         raise credentials_exception
 
-    db_user = session.get(User, token_data.username)
+    stmt = select(User).where(User.username == token_data.username)
+    db_user = session.exec(stmt).first()
     if not db_user:
         raise credentials_exception
     return db_user

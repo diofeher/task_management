@@ -1,8 +1,4 @@
 from fastapi import FastAPI
-from app.models import (
-    create_db_and_tables,
-    engine,
-)
 
 from .routers import task, user
 
@@ -23,8 +19,3 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-@app.on_event("startup")
-def on_startup():
-    create_db_and_tables(engine)

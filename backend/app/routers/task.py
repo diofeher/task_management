@@ -3,6 +3,7 @@ from fastapi import Depends, Query, HTTPException, APIRouter
 from sqlmodel import Session, select
 from app.models.user import User
 from app.auth import get_current_active_user
+from app.db import get_session
 from app.models.task import (
     Task,
     TaskUpdate,
@@ -10,7 +11,6 @@ from app.models.task import (
     TaskStatus,
 )
 
-from app.models import get_session
 
 router = APIRouter(prefix="/tasks")
 

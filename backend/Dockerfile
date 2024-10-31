@@ -1,8 +1,14 @@
 # Base image - use official, minimal image for Python
 FROM python:3.12-slim as base
 
+# Install postgres dependencies
+RUN apt-get update \
+    && apt-get -y install libpq-dev gcc \
+    && pip install psycopg2
+
 # Use a non-root user for security
 RUN addgroup --system appgroup && adduser --system --group appuser
+
 
 # Set the working directory
 WORKDIR /app
@@ -29,7 +35,7 @@ USER appuser
 EXPOSE 8000
 
 # Entrypoint to run the FastAPI application
-CMD ["uvicorn", "app.main:app"]
+CMD ["uvicorn", "--host", "0.0.0.0", "app.main:app"]
 # Security hardening
 # - Use slim image and avoid installing unnecessary packages
 # - Run as a non-root user

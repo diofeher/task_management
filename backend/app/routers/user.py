@@ -8,7 +8,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from passlib.hash import pbkdf2_sha256
 
 from app.models.user import User, UserCreate
-from app.models import get_session
+from app.db import get_session
 from app.auth import (
     create_access_token,
     get_current_active_user,
@@ -27,7 +27,7 @@ async def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ):
     stmt = select(User).where(User.username == form_data.username)
-    db_user = session.exec(stmt).one()
+    db_user = session.exec(stmt).first()
     if not db_user or (
         not pbkdf2_sha256.verify(form_data.password, db_user.hashed_password)
     ):
