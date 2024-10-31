@@ -25,7 +25,7 @@ def read_tasks(
 ):
     stmt = (
         select(Task)
-        .where(Task.status != TaskStatus.deleted)
+        .where(Task.status != TaskStatus.deleted, Task.user_id == current_user.id)
         .offset(offset)
         .limit(limit)
     )
@@ -41,6 +41,7 @@ def create_task(
     task: TaskCreate,
 ):
     db_task = Task.model_validate(task)
+    db_task.user_id = current_user.id
     session.add(db_task)
     session.commit()
     session.refresh(db_task)
@@ -77,6 +78,7 @@ def update_task(
 
     task_data = task.model_dump(exclude_unset=True)
     db_task.sqlmodel_update(task_data)
+    db_task.user_id = current_user.id
     session.add(db_task)
     session.commit()
     session.refresh(db_task)

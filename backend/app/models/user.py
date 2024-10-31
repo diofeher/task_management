@@ -1,6 +1,8 @@
 from sqlmodel import SQLModel, Field
 from sqlalchemy import Column, Integer
 from pydantic import BaseModel, ConfigDict
+
+
 class User(SQLModel, table=True):
     id: int | None = Field(
         default=None,

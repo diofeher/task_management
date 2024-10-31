@@ -3,19 +3,23 @@ import os
 from fastapi.testclient import TestClient
 
 
-from sqlmodel import Session, create_engine
-from sqlmodel.pool import StaticPool
+from sqlmodel import Session
 
 from app.main import app
 from app.models.user import User
 from app.auth import get_current_active_user, hash_password
-from app.db import (get_engine, get_session,
-create_db_and_tables,
+from app.db import (
+    get_engine,
+    get_session,
+    create_db_and_tables,
     drop_db_and_tables,
 )
 
 # TODO: Hardcoded for now, pass as configuration
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql+psycopg2://myuser:mypassword@localhost:5432/testdatabase")
+DATABASE_URL = os.getenv(
+    "DATABASE_URL",
+    "postgresql+psycopg2://myuser:mypassword@localhost:5432/testdatabase",
+)
 
 
 @pytest.fixture(name="session")
@@ -31,7 +35,9 @@ def session_fixture():
 
 @pytest.fixture(name="current_user")
 def current_user_fixture(session):
-    current_user = User(id=100, username="rayquaza", hashed_password=hash_password("violet"))
+    current_user = User(
+        id=100, username="rayquaza", hashed_password=hash_password("violet")
+    )
     session.add(current_user)
     session.commit()
     session.refresh(current_user)
@@ -45,7 +51,7 @@ def client_fixture(current_user, session: Session):
 
     def get_current_active_user_test():
         return current_user
-    
+
     app.dependency_overrides[get_session] = get_session_override
     app.dependency_overrides[get_current_active_user] = (
         get_current_active_user_test

@@ -56,6 +56,10 @@ async def read_users_me(
 
 @router.post("/")
 def create_user(*, session: Session = Depends(get_session), user: UserCreate):
+    stmt = select(User).where(User.username == user.username)
+    db_user = session.exec(stmt).first()
+    if db_user:
+        raise HTTPException(status_code=400, detail="User already exists")
     extra_data = {"hashed_password": hash_password(user.password)}
     db_user = User.model_validate(user, update=extra_data)
 

@@ -3,6 +3,7 @@ import enum
 from sqlmodel import Field, SQLModel, Enum, Column
 from pydantic import ConfigDict
 
+
 class TaskStatus(str, enum.Enum):
     started = "started"
     deleted = "deleted"
