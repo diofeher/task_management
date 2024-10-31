@@ -1,8 +1,10 @@
 "use client";
 
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import { apiFetch, authHeader } from "../utils/api";
 
-import { apiFetch } from "../utils/api";
+import toast from 'react-hot-toast';
+import { useAuth } from '../contexts/AuthContext';
 
 export type Task = {
   id: number;
@@ -14,7 +16,7 @@ export type Task = {
 
 type TaskContextType = {
   tasks: Task[];
-  addTask: (taskText: string) => Promise<void>;
+  addTask: (title: string, description: string, dueDate: string) => Promise<void>;
   updateTask: (id: number, newText: string) => Promise<void>;
   deleteTask: (id: number) => Promise<void>;
   toggleTaskCompletion: (id: number) => Promise<void>;
@@ -25,28 +27,40 @@ const TaskContext = createContext<TaskContextType | undefined>(undefined);
 
 export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
-
+  const { user } = useAuth();
+  console.log("TaskProvider", user);
+  
   // Fetch all tasks from the API
   const fetchTasks = async () => {
     try {
-      const response = await apiFetch('/tasks/');  // Adjust this URL based on your API
+      const response = await apiFetch('/tasks/', {
+        headers: authHeader(user),
+      });
       const data = await response;
       setTasks(data);
-    } catch (error) {
-      console.error("Failed to fetch tasks:", error);
+    } catch (e) {
+      toast.error(e.toString());
     }
   };
 
   // Add a new task via the API
   const addTask = async (title: string, description: string, dueDate: string) => {
     try {
-      const response = await apiFetch('/tasks', {
+      const newTask = await apiFetch('/tasks', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: authHeader(user),
         body: { title, description, due_date: dueDate, completed: false }
       });
-      const newTask = await response;
-      setTasks((prevTasks) => [...prevTasks, newTask]);
+      console.log("added Task", newTask);
+      // setTasks((prevTasks) => {
+      //   console.log("OK!!", prevTasks, newTask);
+      //   return [...prevTasks, newTask]
+      // });
+      // setTasks((prevTasks) => {
+      //   // [...prevTasks, {title: title}]);
+      //   return [{title: 1, description: 1}];
+      // });
+      setTasks([]);
     } catch (error) {
       console.error("Failed to add task:", error);
     }
@@ -56,11 +70,11 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const updateTask = async (id: number, newText: string) => {
     try {
       await apiFetch(`/tasks/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: newText })
+        method: 'PATCH',
+        headers: authHeader(user),
+        body: { title: newText }
       });
-      setTasks((prevTasks) => prevTasks.map((task) => task.id === id ? { ...task, text: newText } : task));
+      setTasks((prevTasks) => prevTasks.map((task) => task.id === id ? { ...task, title: newText } : task));
     } catch (error) {
       console.error("Failed to update task:", error);
     }
@@ -69,7 +83,10 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   // Delete a task via the API
   const deleteTask = async (id: number) => {
     try {
-      await apiFetch(`/tasks/${id}`, { method: 'DELETE' });
+      await apiFetch(`/tasks/${id}`, {
+        method: 'DELETE',
+        headers: authHeader(user)
+      });
       setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
     } catch (error) {
       console.error("Failed to delete task:", error);
@@ -97,13 +114,8 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  // Fetch tasks when the component mounts
-  useEffect(() => {
-    fetchTasks();
-  }, []);
-
   return (
-    <TaskContext.Provider value={{ tasks, addTask, updateTask, deleteTask, toggleTaskCompletion, fetchTasks }}>
+    <TaskContext.Provider value={{ user, tasks, addTask, updateTask, deleteTask, toggleTaskCompletion, fetchTasks }}>
       {children}
     </TaskContext.Provider>
   );

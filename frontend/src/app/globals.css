@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* :root {
   --background: #ffffff;
   --foreground: #171717;
 }
@@ -42,4 +42,159 @@ button {
   margin-left: 8px;
   padding: 4px 8px;
   cursor: pointer;
+} */
+/* Basic reset for consistency */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* General page styling */
+body {
+  display: flex;
+  height: 100vh;
+  background-color: #f7f8fa;
+}
+
+/* Sidebar styles */
+aside {
+  width: 250px;
+  background-color: #2d3436;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+aside h1 {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #555;
+}
+
+aside nav {
+  margin-top: 20px;
+}
+
+aside a {
+  display: block;
+  color: #b2bec3;
+  padding: 10px 0;
+  text-decoration: none;
+  font-size: 1.1em;
+}
+
+aside a:hover {
+  color: #ffffff;
+}
+
+aside footer {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid #555;
+}
+
+aside button {
+  width: 100%;
+  padding: 10px;
+  background-color: #0984e3;
+  border: none;
+  color: white;
+  font-size: 1em;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+aside button:hover {
+  background-color: #74b9ff;
+}
+
+/* Main content area */
+main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+/* Header styles */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+header h1 {
+  font-size: 1.8em;
+  color: #333;
+}
+
+header button {
+  background-color: #0984e3;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 1em;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+header button:hover {
+  background-color: #74b9ff;
+}
+
+/* Task list section */
+section {
+  margin-top: 20px;
+}
+
+section div {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+section input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+section label {
+  font-size: 1.1em;
+  color: #555;
+}
+
+/* Task hover effect */
+section div:hover {
+  background-color: #f0f0f0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  aside {
+    width: 200px;
+  }
+
+  header h1 {
+    font-size: 1.5em;
+  }
+}
+
+@media (max-width: 576px) {
+  aside {
+    display: none;
+  }
+
+  main {
+    padding: 10px;
+  }
 }

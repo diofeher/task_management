@@ -44,13 +44,17 @@ def test_create_task_invalid(client: TestClient):
 
 def test_read_tasks(session: Session, client: TestClient):
     task_1 = Task(
-        title="Deadpond", description="Dive Wilson", due_date="2023-01-01"
+        title="Deadpond",
+        description="Dive Wilson",
+        due_date="2023-01-01",
+        user_id=100,
     )
     task_2 = Task(
         title="Rusty-Man",
         description="Tommy Sharp",
         due_date="2023-01-01",
         status="started",
+        user_id=100,
     )
     session.add(task_1)
     session.add(task_2)

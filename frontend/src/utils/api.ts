@@ -1,3 +1,6 @@
+import { User } from "../contexts/AuthContext";
+import toast from 'react-hot-toast';
+
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
 // TODO: Pass this url as configuration
 
@@ -7,13 +10,30 @@ type FetchOptions = {
   body?: any;
 };
 
+export const apiForm = async (endpoint: string, options: FetchOptions = {}) => {
+  const { method = 'GET', body } = options;
+
+  const response = await fetch(`${BASE_URL}${endpoint}`, {
+    method,
+    body: body,
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    console.log(errorData);
+    throw new Error(errorData.detail || 'API request failed');
+  }
+
+  return response;
+};
+
 export const apiFetch = async (endpoint: string, options: FetchOptions = {}) => {
   const { method = 'GET', headers, body } = options;
 
   const response = await fetch(`${BASE_URL}${endpoint}`, {
     method,
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...headers,
     },
     body: body ? JSON.stringify(body) : undefined,
@@ -21,8 +41,14 @@ export const apiFetch = async (endpoint: string, options: FetchOptions = {}) => 
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.message || 'API request failed');
+    throw new Error(errorData.detail || 'API request failed');
   }
 
   return response.json();
+};
+
+export const authHeader = (user: User) => {
+  return {
+    "Authorization": `Bearer ${user.access_token}`
+  }
 };

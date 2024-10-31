@@ -1,10 +1,8 @@
-"use client";
-
 import { FormEvent, useState } from 'react';
 
 import { useTaskContext } from '../contexts/TaskContext';
 
-const TaskInput = () => {
+const TaskInput: React.FC = () => {
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [dueDate, setDueDate] = useState<string>('');

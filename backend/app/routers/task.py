@@ -25,7 +25,9 @@ def read_tasks(
 ):
     stmt = (
         select(Task)
-        .where(Task.status != TaskStatus.deleted, Task.user_id == current_user.id)
+        .where(
+            Task.status != TaskStatus.deleted, Task.user_id == current_user.id
+        )
         .offset(offset)
         .limit(limit)
     )
