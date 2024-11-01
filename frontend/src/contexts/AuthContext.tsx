@@ -6,9 +6,9 @@ import { apiFetch, apiForm } from "../utils/api";
 import toast from 'react-hot-toast';
 
 export interface User {
+  id: number;
   username: string;
   access_token: string;
-  id: number;
 }
 
 interface AuthContextType {
@@ -50,7 +50,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
     
     if (data.username) {      
-      const newUser = { username: data.username, access_token: data.access_token };
+      const newUser: User = { id: data.id, username: data.username, access_token: data.access_token };
       setUser(newUser);
       localStorage.setItem('user', JSON.stringify(newUser));
       return true;
@@ -72,7 +72,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
     
     if (data.username) {
-      const newUser = { username: data.username, access_token: data.access_token };
+      const newUser: User = { id: data.id, username: data.username, access_token: data.access_token };
       setUser(newUser);
       localStorage.setItem('user', JSON.stringify(newUser));
       return true;

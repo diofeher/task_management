@@ -1,9 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-
-
 body {
   color: var(--foreground);
   background: var(--background);
@@ -32,8 +26,8 @@ button {
   margin-left: 8px;
   padding: 4px 8px;
   cursor: pointer;
-} */
-/* Basic reset for consistency */
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -57,6 +51,7 @@ h1 {
   width:100%;
   color: white;
   border-radius: 10px; /* Adjust the radius as needed */
+  border: 1px solid #e9e9e9;
   padding: 10px; /* Optional: adds padding inside the element */
   text-align: center; /* Optional: centers the text */
 }

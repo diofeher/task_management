@@ -36,8 +36,12 @@ export const apiFetch = async (endpoint: string, options: FetchOptions = {}) => 
   return response;
 };
 
-export const authHeader = (user: User) => {
-  return {
-    "Authorization": `Bearer ${user.access_token}`
+export const authHeader = (user: User | null) => {
+  const requestHeaders: Record<string, string> = {};
+  if(!user) {
+    return requestHeaders;
   }
+  
+  requestHeaders["Authorization"] = `Bearer ${user.access_token}`;
+  return requestHeaders;
 };

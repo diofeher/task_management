@@ -1,11 +1,11 @@
 "use client";
 
+import { NextRouter, useRouter } from 'next/router';
 import { ReactNode, createContext, useContext, useState } from 'react';
+import { User, useAuth } from '../contexts/AuthContext';
 import { apiFetch, authHeader } from "../utils/api";
 
 import toast from 'react-hot-toast';
-import { useAuth } from '../contexts/AuthContext';
-import { useRouter } from 'next/router';
 
 export type Task = {
   id: number;
@@ -17,6 +17,7 @@ export type Task = {
 };
 
 type TaskContextType = {
+  user: User | null;
   tasks: Task[];
   addTask: (title: string, description: string, dueDate: string) => Promise<void>;
   updateTask: (id: number, newText: string) => Promise<void>;
@@ -37,7 +38,7 @@ const calculateStatus = (status: string) => {
 
 const TaskContext = createContext<TaskContextType | undefined>(undefined);
 
-const redirectToLogin = (status, router) => {
+const redirectToLogin = (status: number, router: NextRouter) => {
   if(status == 401) {
     router.push("/login");
   }

@@ -19,8 +19,8 @@ const TaskList: React.FC = () => {
     return false;
   }
 
-  const onEdit = (task) => () => {
-      const newText = prompt('Edit task:', task.text);
+  const onEdit = (task: Task) => () => {
+      const newText = prompt('Edit task:', task.title);
       if (newText) updateTask(task.id, newText);
   }
 

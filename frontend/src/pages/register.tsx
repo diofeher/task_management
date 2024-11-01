@@ -41,11 +41,11 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div class="block">
+    <div className="block">
       <h1>Task List</h1>
       <form onSubmit={handleSubmit}>
         <Toaster/>
-        <div class="input-box">
+        <div className="input-box">
           <label>Username</label>
           <input
             type="text"
@@ -53,7 +53,7 @@ const Register: React.FC = () => {
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
-        <div class="input-box">
+        <div className="input-box">
           <label>Password</label>
           <input
             type="password"
@@ -61,7 +61,7 @@ const Register: React.FC = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <div class="input-box">
+        <div className="input-box">
           <label>Repeat Password</label>
           <input
             type="password"
@@ -70,7 +70,7 @@ const Register: React.FC = () => {
           />
         </div>
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button class="primary" type="submit">Register</button>
+        <button className="primary" type="submit">Register</button>
       </form>
     </div>
   );
