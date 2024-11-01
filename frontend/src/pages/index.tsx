@@ -15,9 +15,7 @@ const TaskList: React.FC = () => {
     if(user) {
       fetchTasks();
     } else {
-      const timeoutId = setTimeout((user) => {
-        if(!user) router.push("/login");
-      }, 1000);
+      const timeoutId = setTimeout(() => router.push("/login"), 1000);
 
       return () => clearTimeout(timeoutId);
     }
