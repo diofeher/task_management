@@ -1,9 +1,8 @@
 "use client";
 
-import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import { ReactNode, createContext, useContext, useState } from 'react';
 import { apiFetch, authHeader } from "../utils/api";
 
-import { isRedirectError } from "next/dist/client/components/redirect";
 import toast from 'react-hot-toast';
 import { useAuth } from '../contexts/AuthContext';
 import { useRouter } from 'next/router';

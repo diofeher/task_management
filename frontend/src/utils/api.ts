@@ -6,6 +6,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000'
 type FetchOptions = {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   headers?: Record<string, string>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body?: any;
 };
 

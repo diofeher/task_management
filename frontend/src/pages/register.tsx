@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 
-import { NextResponse } from "next/server";
 import { Toaster } from 'react-hot-toast';
-import { redirect } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { useAuth } from '../contexts/AuthContext';
 import {useRouter} from 'next/router';
@@ -29,6 +27,9 @@ const Register: React.FC = () => {
                 return;
             }
             const success2 = await login(username, password);
+            if(!success2) {
+              return;
+          }
         } catch(e) {
             toast.error(e.toString());
             return;

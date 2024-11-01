@@ -1,7 +1,7 @@
 import { FormEvent, useState } from 'react';
 
 interface ChildProps {
-  addTask: any;
+  addTask: (title: string, description: string, dueDate: string) => void;
 }
 
 const TaskInput: React.FC<ChildProps> = ({ addTask }) => {

@@ -22,7 +22,7 @@ const Register: React.FC = () => {
                 toast.error('Unknown error when registering');
             }
             const success2 = await login(username, password);
-            if(!success) {
+            if(!success2) {
               toast.error('Unknown error when logging in');
           }
         } catch(e) {

@@ -54,7 +54,7 @@ const Login: React.FC = () => {
         </div>
         {error && <p style={{ color: 'red' }}>{error}</p>}
         <button className="primary" type="submit">Login</button>
-        <span>Don't have an account yet? </span><Link className="link" href="/register">Register</Link>
+        <span>Don&lsquo;t have an account yet? </span><Link className="link" href="/register">Register</Link>
       </form>
     </div>
   );
