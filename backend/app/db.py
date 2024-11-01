@@ -15,9 +15,9 @@ def get_session():
         yield session
 
 
-def create_db_and_tables(engine):
+def create_db_and_tables(engine=get_engine()):
     SQLModel.metadata.create_all(engine)
 
 
-def drop_db_and_tables(engine):
+def drop_db_and_tables(engine=get_engine()):
     SQLModel.metadata.drop_all(engine)

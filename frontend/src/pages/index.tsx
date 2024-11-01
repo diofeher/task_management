@@ -44,7 +44,7 @@ const TaskList: React.FC = () => {
       <div className="block">
         <h1>Task list</h1>
         <ul className="task-list">
-        {tasks.map((task: Task) => (
+        {tasks && tasks.map((task: Task) => (
             <li key={task.id} style={{ textDecoration: task.completed ? 'line-through' : 'none' }}>
             <div className="checkbox-container">
               <input
