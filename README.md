@@ -9,8 +9,13 @@ Backend:
 - Alembi for Database migrations
 - Containerization with Docker and Uvicorn for serving
 - Ruff for style checks
-- Github actions for automatic code checking, using Ruff and ESLint
+- Github Actions as CI/CD for automatic code checking, using Ruff and ESLint
 
+Frontend:
+- Usage of React and Next.js
+- Custom CSS, no libraries
+- Usage of ESLint for linting
+- Containerization with Docker and Docker compose
 
 # Installation
 
@@ -30,3 +35,11 @@ pre-commit install
 This means every time you're committing, the linters are activated to lint and format your code.
 
 There's a Github action for making sure the code is compliant even if lint were bypassed locally.
+
+# Running 
+
+To run the whole application, run with docker compose.
+
+```
+docker compose up
+```
