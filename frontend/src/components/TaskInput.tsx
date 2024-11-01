@@ -20,7 +20,7 @@ const TaskInput: React.FC<ChildProps> = ({ addTask }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="task-input" onSubmit={handleSubmit}>
       <input
         type="text"
         value={title}

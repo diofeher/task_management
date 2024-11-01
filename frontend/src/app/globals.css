@@ -2,17 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
 
 body {
   color: var(--foreground);
@@ -31,7 +21,7 @@ li {
   align-items: center;
 }
 
-input[type="text"], textarea, input[type="date"] {
+input[type="text"], textarea, input[type="date"], input[type="password"] {
   padding: 8px;
   margin: 8px;
   border: 1px solid #fff;
@@ -48,153 +38,154 @@ button {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
+  font-family: -apple-system, "system-ui", "Segoe UI", Roboto, "Apple Color Emoji", Helvetica, Arial, sans-serif;
 }
 
-/* General page styling */
-body {
-  display: flex;
-  height: 100vh;
-  background-color: #f7f8fa;
+h1 {
+  font-size:2em;
+  margin:10px;
 }
 
-/* Sidebar styles */
-aside {
-  width: 250px;
-  background-color: #2d3436;
+.block {
+  margin: auto;
+  width: 500px;
+}
+
+.primary {
+  margin-top:20px;
+  background: red;
+  width:100%;
   color: white;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
+  border-radius: 10px; /* Adjust the radius as needed */
+  padding: 10px; /* Optional: adds padding inside the element */
+  text-align: center; /* Optional: centers the text */
 }
 
-aside h1 {
-  font-size: 1.5em;
-  font-weight: bold;
-  margin-bottom: 20px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #555;
+.link {
+  color: blue;
 }
 
-aside nav {
-  margin-top: 20px;
+.input-box {
+  border:2px solid #e6e6e6;
+  margin:5px;
+  width:100%;
 }
 
-aside a {
+.input-box label {
   display: block;
-  color: #b2bec3;
-  padding: 10px 0;
-  text-decoration: none;
-  font-size: 1.1em;
+  margin: 5px 0 0 15px;
+  font-size: 0.8em;
+  color: grey;
 }
 
-aside a:hover {
-  color: #ffffff;
-}
-
-aside footer {
-  margin-top: auto;
-  padding-top: 20px;
-  border-top: 1px solid #555;
-}
-
-aside button {
+.input-box input {
+  display: block;
   width: 100%;
-  padding: 10px;
-  background-color: #0984e3;
-  border: none;
-  color: white;
-  font-size: 1em;
-  cursor: pointer;
-  border-radius: 5px;
 }
 
-aside button:hover {
-  background-color: #74b9ff;
+.block h1 {
+  margin: auto;
+  text-align: center;
 }
 
-/* Main content area */
-main {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
+ul.task-list li {
+  border-bottom: 1px solid #e9e9e9;
 }
 
-/* Header styles */
-header {
-  display: flex;
-  justify-content: space-between;
+/* Container for each checkbox */
+.checkbox-container {
+  display: inline-block;
+  margin: 10px;
+}
+
+/* Hide native checkboxes */
+.rounded-checkbox {
+  display: none;
+}
+
+/* Style the label */
+.checkbox-container .custom-checkbox {
+  display: inline-flex;
   align-items: center;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #ddd;
-}
-
-header h1 {
-  font-size: 1.8em;
-  color: #333;
-}
-
-header button {
-  background-color: #0984e3;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  font-size: 1em;
-  border-radius: 5px;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #333;
+  border-radius: 50%; /* Rounded shape */
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-header button:hover {
-  background-color: #74b9ff;
+/* Style for checked state */
+.rounded-checkbox:checked + .custom-checkbox {
+  background-color: #333;
 }
 
-/* Task list section */
-section {
-  margin-top: 20px;
+/* Checkmark styling */
+.rounded-checkbox:checked + .custom-checkbox::after {
+  content: '✔';
+  color: white;
 }
 
-section div {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  margin-bottom: 10px;
-  background-color: white;
-  border-radius: 5px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+/* Checkmark styling */
+.delete, .task-input button {
+  content: 'X';
+  color: white;
+  background: #FF7276;
+  border:1px solid #e9e9e9;
+  border-radius: 5%; /* Rounded shape */
 }
 
-section input[type="checkbox"] {
+.delete {
+  font-size:8px;
+}
+
+.date {
+  font-size: 0.8em;
+  color:grey;
+}
+
+.date::before {
+  margin-right: 3px;
+  content: '📅';
+}
+
+.action-buttons {
+  margin-left: auto; 
+  margin-right: 0;
+}
+
+.title {
   margin-right: 10px;
+  display:block;
 }
 
-section label {
-  font-size: 1.1em;
-  color: #555;
+.date {
+  margin-right:100px;
 }
 
-/* Task hover effect */
-section div:hover {
-  background-color: #f0f0f0;
+.description {
+  font-size: 0.9em;
+  color: grey;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  aside {
-    width: 200px;
-  }
-
-  header h1 {
-    font-size: 1.5em;
-  }
+.task-input {
+  border:1px solid #e9e9e9;
+  border-radius: 2%; /* Rounded shape */
 }
 
-@media (max-width: 576px) {
-  aside {
-    display: none;
-  }
+.task-input input, .task-input textarea {
+  display: block;
+  width: 100%;
+}
 
-  main {
-    padding: 10px;
-  }
+.task-input input[type=date] {
+  display:inline;
+  width: 50%;
+  color: grey;
+}
+
+.task-input button {
+  float: right;
+  margin-right: 10px;
 }

@@ -33,42 +33,45 @@ const Register: React.FC = () => {
             toast.error(e.toString());
             return;
         };
-        router.push(`/tasks/`); // Navigate to the new post page
+        router.push(`/`); // Navigate to the new post page
     } else {
       toast.error('Please fill your username/password');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Toaster/>
-      <div>
-        <label>Username</label>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </div>
-      <div>
-        <label>Password</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </div>
-      <div>
-        <label>Repeat Password</label>
-        <input
-          type="password"
-          value={repeatPassword}
-          onChange={(e) => setRepeatPassword(e.target.value)}
-        />
-      </div>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <button type="submit">Register</button>
-    </form>
+    <div class="block">
+      <h1>Task List</h1>
+      <form onSubmit={handleSubmit}>
+        <Toaster/>
+        <div class="input-box">
+          <label>Username</label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
+        <div class="input-box">
+          <label>Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <div class="input-box">
+          <label>Repeat Password</label>
+          <input
+            type="password"
+            value={repeatPassword}
+            onChange={(e) => setRepeatPassword(e.target.value)}
+          />
+        </div>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        <button class="primary" type="submit">Register</button>
+      </form>
+    </div>
   );
 };
 

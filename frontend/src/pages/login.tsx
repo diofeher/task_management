@@ -25,34 +25,38 @@ const Login: React.FC = () => {
             toast.error(e.toString());
             return;
         }
-        router.push(`/tasks/`); // Navigate to the new post page
+        router.push(`/`); // Navigate to the new post page
     } else {
       toast.error('Please fill your username/password');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Username</label>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </div>
-      <div>
-        <label>Password</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </div>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <button type="submit">Login</button>
-      <Link href="/register">Register</Link>
-    </form>
+    <div className="block">
+      <h1>Task Management System</h1>
+      <form onSubmit={handleSubmit}>
+        <input name="hidden" type="text" style={{display:"none"}} />
+        <div className="input-box">
+          <label>Username</label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
+        <div className="input-box">
+          <label>Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        <button className="primary" type="submit">Login</button>
+        <span>Don't have an account yet? </span><Link className="link" href="/register">Register</Link>
+      </form>
+    </div>
   );
 };
 

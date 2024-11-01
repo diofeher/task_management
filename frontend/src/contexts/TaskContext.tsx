@@ -12,7 +12,8 @@ export type Task = {
   id: number;
   title: string;
   description: string;
-  dueDate: string; // ISO date format (string)
+  due_date: string; // ISO date format (string)
+  status: string;
   completed: boolean;
 };
 
@@ -24,6 +25,16 @@ type TaskContextType = {
   toggleTaskCompletion: (id: number) => Promise<void>;
   fetchTasks: () => Promise<void>;
 };
+
+const calculateStatus = (status: string) => {
+  if(status == "created") {
+    return "finished";
+  }
+  else {
+    return "created";
+  }
+
+}
 
 const TaskContext = createContext<TaskContextType | undefined>(undefined);
 
@@ -48,7 +59,8 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
       
       console.log("response.status", response.status);
       redirectToLogin(response.status, router);
-      setTasks(await response.json());
+      const data = (await response.json()).map((obj: Task) => ({ ...obj, completed: obj.status == "finished" }))
+      setTasks(data);
     } catch (error) {
       toast.error(error.toString());
     }
@@ -101,16 +113,14 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     try {
       const task = tasks.find((task) => task.id === id);
       if (task) {
-        await apiFetch(`/tasks/${id}`, {
+        const newTask: Task = await(await apiFetch(`/tasks/${task.id}`, {
           method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ completed: !task.completed })
-        });
+          headers: authHeader(user),
+          body: { status: calculateStatus(task.status) }
+        })).json();
+
         setTasks((prevTasks) =>
-          prevTasks.map((task) =>
-            task.id === id ? { ...task, completed: !task.completed } : task
-          )
-        );
+          prevTasks.map((task) => newTask.id === task.id ? {...newTask, completed: newTask.status == "finished" } : task));
       }
     } catch (error) {
       console.error("Failed to toggle task completion:", error);

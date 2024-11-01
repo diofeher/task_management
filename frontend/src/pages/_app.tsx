@@ -1,3 +1,5 @@
+import "../app/globals.css";
+
 import App from 'next/app'
 import { AuthProvider } from '../contexts/AuthContext';
 import React from 'react'
