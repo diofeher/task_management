@@ -4,16 +4,26 @@ import { Task, useTaskContext } from '../contexts/TaskContext';
 import TaskInput from '@/components/TaskInput';
 import { TaskProvider } from '../contexts/TaskContext';
 import { useAuth } from '../contexts/AuthContext';
+import { useRouter } from 'next/router';
 
 const TaskList: React.FC = () => {
   const { tasks, updateTask, deleteTask, addTask, fetchTasks, toggleTaskCompletion } = useTaskContext();
   const { user } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     if(user) {
       fetchTasks();
+    } else {
+      const timeoutId = setTimeout((user) => {
+        if(!user) router.push("/login");
+      }, 1000);
+
+      return () => clearTimeout(timeoutId);
     }
   }, [user]);
+
+
 
   if(!user) {
     return false;

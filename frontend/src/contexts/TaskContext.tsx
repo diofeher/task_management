@@ -57,7 +57,6 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
         headers: authHeader(user),
       });
       
-      console.log("response.status", response.status);
       redirectToLogin(response.status, router);
       const data = (await response.json()).map((obj: Task) => ({ ...obj, completed: obj.status == "finished" }))
       setTasks(data);
