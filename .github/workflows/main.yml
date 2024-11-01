@@ -1,0 +1,47 @@
+# .github/workflows/ruff.yml
+
+name: Lint with Ruff
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  backend-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"  # Specify the Python version
+
+      - name: Install Ruff
+        run: pip install ruff
+
+      - name: Run Ruff
+        run: ruff check backend  # Lint the entire repository
+  frontend-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"  # Specify Node.js version
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm install --legacy-peer-deps
+
+      - name: Run ESLint
+        working-directory: frontend
+        run: npx eslint .  # Runs ESLint on the frontend folder
