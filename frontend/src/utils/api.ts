@@ -1,5 +1,4 @@
 import { User } from "../contexts/AuthContext";
-import toast from 'react-hot-toast';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
 // TODO: Pass this url as configuration
@@ -18,11 +17,6 @@ export const apiForm = async (endpoint: string, options: FetchOptions = {}) => {
     body: body,
   });
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.detail || 'API request failed');
-  }
-
   return response;
 };
 
@@ -38,12 +32,7 @@ export const apiFetch = async (endpoint: string, options: FetchOptions = {}) => 
     body: body ? JSON.stringify(body) : undefined,
   });
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.detail || 'API request failed');
-  }
-
-  return response.json();
+  return response;
 };
 
 export const authHeader = (user: User) => {

@@ -3,6 +3,8 @@
 import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import { apiFetch, apiForm } from "../utils/api";
 
+import toast from 'react-hot-toast';
+
 export interface User {
   username: string;
   access_token: string;
@@ -36,13 +38,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     body.append("username", username);
     body.append("password", password);
     
-    const response = await (await apiForm('/users/token', {
+    const response = await apiForm('/users/token', {
       method: 'POST',
       body
-    })).json();
+    });
 
-    if (response.username) {      
-      const newUser = { username: response.username, access_token: response.access_token };
+    const data = await response.json();
+    if(response.status != 200) {
+      toast.error(data.detail);
+      return false;
+    }
+    
+    if (data.username) {      
+      const newUser = { username: data.username, access_token: data.access_token };
       setUser(newUser);
       localStorage.setItem('user', JSON.stringify(newUser));
       return true;
@@ -57,8 +65,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       body: {username, password}
     });
 
-    if (response.username) {
-      const newUser = { username: response.username, access_token: response.access_token };
+    const data = await response.json();
+    if(response.status != 200) {
+      toast.error(data.detail);
+      return false;
+    }
+    
+    if (data.username) {
+      const newUser = { username: data.username, access_token: data.access_token };
       setUser(newUser);
       localStorage.setItem('user', JSON.stringify(newUser));
       return true;

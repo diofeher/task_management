@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
-import Link from 'next/link'
+import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { useAuth } from '../contexts/AuthContext';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
 const Login: React.FC = () => {
   const { login } = useAuth();
@@ -19,7 +19,6 @@ const Login: React.FC = () => {
         try {
             const success = await login(username, password);
             if(!success) {
-                toast.error('Unknown error');
                 return;
             }
         } catch(e) {

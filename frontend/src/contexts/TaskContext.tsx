@@ -3,8 +3,10 @@
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import { apiFetch, authHeader } from "../utils/api";
 
+import { isRedirectError } from "next/dist/client/components/redirect";
 import toast from 'react-hot-toast';
 import { useAuth } from '../contexts/AuthContext';
+import { useRouter } from 'next/router';
 
 export type Task = {
   id: number;
@@ -25,31 +27,42 @@ type TaskContextType = {
 
 const TaskContext = createContext<TaskContextType | undefined>(undefined);
 
+const redirectToLogin = (status, router) => {
+  if(status == 401) {
+    router.push("/login");
+  }
+}
+
 export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const { user } = useAuth();
+  const router = useRouter()
   
   // Fetch all tasks from the API
   const fetchTasks = async () => {
+    let response;
     try {
-      const response = await apiFetch('/tasks/', {
+      response = await apiFetch('/tasks/', {
         headers: authHeader(user),
       });
-      const data = await response;
-      setTasks(data);
-    } catch (e) {
-      toast.error(e.toString());
+      
+      console.log("response.status", response.status);
+      redirectToLogin(response.status, router);
+      setTasks(await response.json());
+    } catch (error) {
+      toast.error(error.toString());
     }
   };
 
   // Add a new task via the API
   const addTask = async (title: string, description: string, dueDate: string) => {
     try {
-      const newTask = await apiFetch('/tasks', {
+      const response = await apiFetch('/tasks', {
         method: 'POST',
         headers: authHeader(user),
         body: { title, description, due_date: dueDate, completed: false }
       });
+      const newTask = await response.json();
       setTasks((prevTasks) => [...prevTasks, newTask]);
     } catch (error) {
       console.error("Failed to add task:", error);

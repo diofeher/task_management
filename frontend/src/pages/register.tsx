@@ -18,11 +18,14 @@ const Register: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    if(password != repeatPassword) {
+      toast.error("Repeated password should be the same as the password.");
+      return;
+    }
     if (username && password) {
         try {
             const success = await register(username, password);
             if(!success) {
-                toast.error('Unknown error');
                 return;
             }
             const success2 = await login(username, password);
