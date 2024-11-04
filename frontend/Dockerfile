@@ -4,7 +4,7 @@ FROM node:alpine
 COPY package.json package-lock.json /app/
 
 # Install deps
-RUN cd /app &&  npm install --legacy-peer-deps
+RUN cd /app && npm install --legacy-peer-deps
 
 WORKDIR /app
 
