@@ -1,7 +1,8 @@
+from .tasks.routers import router as task_router
+from .users.routers import router as user_router
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
-from .routers import task, user
 from .db import create_db_and_tables
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -15,8 +16,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
-app.include_router(task.router)
-app.include_router(user.router)
+app.include_router(task_router)
+app.include_router(user_router)
 
 origins = [
     "*",

@@ -6,7 +6,7 @@ General:
 Backend:
 - FastAPI as the Webserver
 - PostgresQL + sqlalchemy on the Backend
-- Alembi for Database migrations
+
 - Containerization with Docker and Uvicorn for serving
 - Ruff for style checks
 - Github Actions as CI/CD for automatic code checking, using Ruff and ESLint
@@ -16,6 +16,11 @@ Frontend:
 - Custom CSS, no libraries
 - Usage of ESLint for linting
 - Containerization with Docker and Docker compose
+
+TODO:
+- Alembi for Database migrations
+- mypy for static type checking 
+
 
 # Installation
 

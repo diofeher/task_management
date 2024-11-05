@@ -25,15 +25,3 @@ class Task(TaskBase, table=True):
     model_config = ConfigDict(validate_assignment=True)
 
     id: int | None = Field(default=None, primary_key=True, index=True)
-
-
-class TaskCreate(TaskBase):
-    pass
-
-
-class TaskUpdate(TaskBase):
-    title: str | None = None
-    description: str | None = None
-    status: TaskStatus | None = Field(
-        sa_column=Column(Enum(TaskStatus)), default=TaskStatus.created
-    )

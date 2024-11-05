@@ -6,7 +6,7 @@ from fastapi.testclient import TestClient
 from sqlmodel import Session
 
 from app.main import app
-from app.models.user import User
+from backend.app.users.models import User
 from app.auth import get_current_active_user, hash_password
 from app.db import (
     get_engine,
