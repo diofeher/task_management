@@ -1,3 +1,3 @@
-from app.main import app
+from backend.app import app
 
 __all__ = [app]

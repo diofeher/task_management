@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - main
+      - feature/pytest
   pull_request:
 
 jobs:
@@ -26,6 +27,40 @@ jobs:
 
       - name: Run Ruff
         run: ruff check backend  # Lint the entire repository
+      
+      - name: Run Ruff
+        run: ruff check backend  # Lint the entire repository
+  backend-test:
+    runs-on: ubuntu-latest
+    services:
+        # Label used to access the service container
+        postgres:
+          # Docker Hub image
+          image: postgres
+          # Provide the password for postgres
+          env:
+            POSTGRES_PASSWORD: postgres
+          # Set health checks to wait until postgres has started
+          ports:
+          - 5432:5432
+          options: >-
+            --health-cmd pg_isready
+            --health-interval 10s
+            --health-timeout 5s
+            --health-retries 5
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - uses: eifinger/setup-rye@v4
+      - name: Install dependencies
+        working-directory: backend
+        run: rye sync
+      - name: Run tests
+        working-directory: backend
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+        run: rye run pytest
   frontend-lint:
     runs-on: ubuntu-latest
 

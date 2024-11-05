@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 from sqlmodel import Session
-from backend.app.tasks.models import Task
+from ..app.tasks.models import Task
 
 
 def test_create_task(client: TestClient):
@@ -103,13 +103,14 @@ def test_update_task(session: Session, client: TestClient):
     session.commit()
 
     response = client.patch(
-        f"/tasks/{task_1.id}", json={"title": "Deadpuddle"}
+        f"/tasks/{task_1.id}",
+        json={"title": "Deadpuddle", "description": "asd"},
     )
     data = response.json()
 
     assert response.status_code == 200
     assert data["title"] == "Deadpuddle"
-    assert data["description"] == "Dive Wilson"
+    assert data["description"] == "asd"
     assert data["id"] == task_1.id
 
 

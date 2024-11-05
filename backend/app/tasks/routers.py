@@ -1,9 +1,9 @@
 from typing import Annotated
 from fastapi import Depends, Query, APIRouter
 from sqlalchemy.orm import Session
-from app.users.models import User
-from app.auth import get_current_active_user
-from app.db import get_session
+from ..users.models import User
+from ..auth import get_current_active_user
+from ..db import get_session
 from .schema import TaskInput, TaskOutput
 from .service import TaskService
 

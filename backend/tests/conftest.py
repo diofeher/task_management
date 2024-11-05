@@ -2,13 +2,16 @@ import pytest
 import os
 from fastapi.testclient import TestClient
 
+# import sys
+
+# sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from sqlmodel import Session
 
-from app.main import app
-from backend.app.users.models import User
-from app.auth import get_current_active_user, hash_password
-from app.db import (
+from ..app.app import app
+from ..app.users.models import User
+from ..app.auth import get_current_active_user, hash_password
+from ..app.db import (
     get_engine,
     get_session,
     create_db_and_tables,

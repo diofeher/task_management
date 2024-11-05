@@ -7,9 +7,9 @@ from fastapi import Depends, HTTPException, APIRouter
 from fastapi.security import OAuth2PasswordRequestForm
 from passlib.hash import pbkdf2_sha256
 
-from app.users.models import User, UserCreate
-from app.db import get_session
-from app.auth import (
+from .models import User, UserCreate
+from ..db import get_session
+from ..auth import (
     create_access_token,
     get_current_active_user,
     hash_password,
