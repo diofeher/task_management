@@ -12,7 +12,7 @@ def get_engine(url: str = settings.database_url) -> Engine:
     return engine
 
 
-def get_session() -> Generator[Session]:
+def get_session() -> Generator[Session, None, None]:
     with Session(get_engine()) as session:
         yield session
 
