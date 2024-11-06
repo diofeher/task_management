@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Dict
 from datetime import timedelta
 
 from sqlmodel import Session, select
@@ -20,12 +20,12 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 router = APIRouter(prefix="/users")
 
 
-@router.post("/token")
+@router.post("/token")  # type: ignore
 async def login(
     *,
     session: Session = Depends(get_session),
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-):
+) -> Dict[str, str]:
     stmt = select(User).where(User.username == form_data.username)
     db_user = session.exec(stmt).first()
     if not db_user or (
@@ -47,14 +47,14 @@ async def login(
     }
 
 
-@router.get("/me")
+@router.get("/me")  # type: ignore
 async def read_users_me(
     current_user: Annotated[User, Depends(get_current_active_user)],
-):
+) -> User:
     return current_user
 
 
-@router.post("/")
+@router.post("/")  # type: ignore
 def create_user(*, session: Session = Depends(get_session), user: UserCreate):
     stmt = select(User).where(User.username == user.username)
     db_user = session.exec(stmt).first()

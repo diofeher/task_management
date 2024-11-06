@@ -76,6 +76,8 @@ packaging==24.1
     # via pytest
 passlib==1.7.4
     # via task-management
+pip==24.3.1
+    # via task-management
 pluggy==1.5.0
     # via pytest
 priority==2.0.0

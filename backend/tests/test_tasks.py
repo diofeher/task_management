@@ -3,7 +3,7 @@ from sqlmodel import Session
 from ..app.tasks.models import Task
 
 
-def test_create_task(client: TestClient):
+def test_create_task(client: TestClient) -> None:
     response = client.post(
         "/tasks/",
         json={
@@ -23,13 +23,13 @@ def test_create_task(client: TestClient):
     assert data["id"] is not None
 
 
-def test_create_task_incomplete(client: TestClient):
+def test_create_task_incomplete(client: TestClient) -> None:
     # No title, title is needed
     response = client.post("/tasks/", json={"description": "Deadpond"})
     assert response.status_code == 422
 
 
-def test_create_task_invalid(client: TestClient):
+def test_create_task_invalid(client: TestClient) -> None:
     # status has an invalid type
     response = client.post(
         "/tasks/",
@@ -42,7 +42,7 @@ def test_create_task_invalid(client: TestClient):
     assert response.status_code == 422
 
 
-def test_read_tasks(session: Session, client: TestClient):
+def test_read_tasks(session: Session, client: TestClient) -> None:
     task_1 = Task(
         title="Deadpond",
         description="Dive Wilson",
@@ -74,7 +74,7 @@ def test_read_tasks(session: Session, client: TestClient):
     assert data[1]["id"] == task_2.id
 
 
-def test_read_task(session: Session, client: TestClient):
+def test_read_task(session: Session, client: TestClient) -> None:
     task_1 = Task(
         title="Deadpond",
         description="Dive Wilson",
@@ -92,7 +92,7 @@ def test_read_task(session: Session, client: TestClient):
     assert data["description"] == task_1.description
 
 
-def test_update_task(session: Session, client: TestClient):
+def test_update_task(session: Session, client: TestClient) -> None:
     task_1 = Task(
         title="Deadpond",
         description="Dive Wilson",
@@ -114,7 +114,7 @@ def test_update_task(session: Session, client: TestClient):
     assert data["id"] == task_1.id
 
 
-def test_delete_task(session: Session, client: TestClient):
+def test_delete_task(session: Session, client: TestClient) -> None:
     task_1 = Task(
         title="Deadpond", description="Dive Wilson", due_date="2023-01-01"
     )
@@ -137,5 +137,5 @@ def test_delete_task(session: Session, client: TestClient):
 
     response = client.delete(f"/tasks/{task_2.id}")
     assert response.status_code == 200
-
+    assert task_in_db is not None
     assert task_in_db.status == "deleted"

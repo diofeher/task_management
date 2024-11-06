@@ -21,6 +21,7 @@ dependencies = [
     "sqlalchemy-utils>=0.41.2",
     "pydantic-settings>=2.6.0",
     "mypy>=1.13.0",
+    "pip>=24.3.1",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
@@ -50,3 +51,6 @@ packages = ["src/task_management"]
 [tool.ruff]
 # Set the maximum line length to 79.
 line-length = 79
+
+[tool.mypy]
+ignore_missing_imports=true

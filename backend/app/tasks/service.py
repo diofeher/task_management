@@ -10,9 +10,9 @@ from .schema import TaskInput, TaskOutput
 @dataclass
 class TaskService:
     session: Session
-    current_user_id: int
+    current_user_id: int | None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.repository: TaskRepository = TaskRepository(
             self.session, self.current_user_id
         )
@@ -49,4 +49,4 @@ class TaskService:
 
         task.status = TaskStatus.deleted
         self.repository.update(task)
-        return task
+        return TaskOutput(**dict(task))

@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 from .models import TaskStatus
 
 
-class TaskInput(BaseModel):
+class TaskInput(BaseModel):  # type: ignore
     title: str = Field(min_length=1, max_length=50)
     description: str | None = None
     user_id: int | None = None
@@ -12,7 +12,7 @@ class TaskInput(BaseModel):
     status: TaskStatus = TaskStatus.created
 
 
-class TaskOutput(BaseModel):
+class TaskOutput(BaseModel):  # type: ignore
     id: int
     title: str
     description: Optional[str] = ""

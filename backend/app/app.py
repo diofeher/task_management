@@ -1,3 +1,4 @@
+from typing import AsyncGenerator
 from .tasks.routers import router as task_router
 from .users.routers import router as user_router
 from fastapi import FastAPI
@@ -9,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     # Load the ML model
     create_db_and_tables()
     yield
