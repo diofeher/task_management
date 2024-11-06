@@ -3,7 +3,7 @@ from sqlalchemy import Column, Integer
 from pydantic import BaseModel, ConfigDict
 
 
-class User(SQLModel, table=True):  # type: ignore
+class User(SQLModel, table=True):
     id: int | None = Field(
         default=None,
         sa_column=Column(
@@ -14,17 +14,17 @@ class User(SQLModel, table=True):  # type: ignore
     hashed_password: str
 
 
-class UserCreate(BaseModel):  # type: ignore
+class UserCreate(BaseModel):
     model_config = ConfigDict(validate_assignment=True)
 
     username: str
     password: str
 
 
-class Token(BaseModel):  # type: ignore
+class Token(BaseModel):
     access_token: str
     token_type: str
 
 
-class TokenData(BaseModel):  # type: ignore
+class TokenData(BaseModel):
     username: str | None = None

@@ -38,7 +38,7 @@ class TaskRepository:
         return [TaskOutput(**dict(task[0])) for task in tasks]
 
     def get_by_id(self, id: int) -> Task | None:
-        return self.session.get(Task, id)  # type: ignore
+        return self.session.get(Task, id)
 
     def update(self, task: Task) -> TaskOutput:
         self.session.execute(

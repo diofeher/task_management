@@ -60,7 +60,7 @@ jobs:
         working-directory: backend
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
-        run: rye run pytest
+        run: rye test
   frontend-lint:
     runs-on: ubuntu-latest
 

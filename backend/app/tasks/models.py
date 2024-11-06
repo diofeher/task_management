@@ -11,7 +11,7 @@ class TaskStatus(str, enum.Enum):
     created = "created"
 
 
-class TaskBase(SQLModel):  # type: ignore
+class TaskBase(SQLModel):
     title: str
     description: str | None
     due_date: datetime | None = Field(nullable=True, default=None)

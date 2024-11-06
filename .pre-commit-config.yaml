@@ -14,3 +14,6 @@ repos:
     hooks:
     -   id: mypy
         args: [--strict, --ignore-missing-imports]
+        types_or: [python, pyi]
+        additional_dependencies:
+        -   "sqlmodel==0.0.22"

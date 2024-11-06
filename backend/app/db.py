@@ -1,4 +1,5 @@
 from sqlalchemy_utils import database_exists, create_database
+from typing import Generator
 from sqlmodel import Session, create_engine, SQLModel
 from sqlalchemy.engine import Engine
 from .settings import settings
@@ -11,7 +12,7 @@ def get_engine(url: str = settings.database_url) -> Engine:
     return engine
 
 
-def get_session() -> Session:
+def get_session() -> Generator[Session]:
     with Session(get_engine()) as session:
         yield session
 
