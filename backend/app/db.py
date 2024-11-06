@@ -1,5 +1,6 @@
 from sqlalchemy_utils import database_exists, create_database
-from sqlmodel import Session, create_engine, SQLModel, Engine
+from sqlmodel import Session, create_engine, SQLModel
+from sqlalchemy.engine import Engine
 from .settings import settings
 
 

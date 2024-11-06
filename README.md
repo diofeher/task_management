@@ -10,6 +10,7 @@ Backend:
 - Containerization with Docker and Uvicorn for serving
 - Ruff for style checks
 - Github Actions as CI/CD for automatic code checking, using Ruff and ESLint
+- mypy for static type checking 
 
 Frontend:
 - Usage of React and Next.js
@@ -19,7 +20,6 @@ Frontend:
 
 TODO:
 - Alembi for Database migrations
-- mypy for static type checking 
 
 
 # Installation

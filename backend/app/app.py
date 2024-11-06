@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     # Load the ML model
     create_db_and_tables()
     yield
