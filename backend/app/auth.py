@@ -61,7 +61,7 @@ async def get_current_user(
     stmt = select(User).where(
         cast("ColumnElement[bool]", User.username == token_data.username)
     )
-    db_user = session.execute(stmt).one()
+    db_user = session.execute(stmt).scalar_one()
     if not db_user:
         raise credentials_exception
     return db_user

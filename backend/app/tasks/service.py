@@ -41,6 +41,7 @@ class TaskService:
         task.due_date = data.due_date
 
         task.user_id = self.current_user_id
+        task.status = data.status
         self.repository.update(task)
         return TaskOutput(**dict(task))
 

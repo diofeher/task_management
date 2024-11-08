@@ -115,7 +115,7 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
         const newTask: Task = await(await apiFetch(`/tasks/${task.id}`, {
           method: 'PATCH',
           headers: authHeader(user),
-          body: { status: calculateStatus(task.status) }
+          body: { ...task, status: calculateStatus(task.status) }
         })).json();
 
         setTasks((prevTasks) =>

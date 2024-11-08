@@ -20,7 +20,6 @@ class TaskRepository:
         return TaskOutput(**dict(task))
 
     def list(self, offset: int, limit: int) -> List[TaskOutput]:
-        # import pdb; pdb.set_trace()
         stmt = (
             select(Task)
             .where(
